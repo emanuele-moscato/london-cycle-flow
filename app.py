@@ -89,7 +89,7 @@ def plot_prediction(rainfall, temperature, n_clicks=0):
 
     data = [trace1, trace2]
     
-    if rainfall and temperature:
+    if rainfall and temperature and n_clicks:
         rainfall = float(rainfall)
         temperature = float(temperature)
         
