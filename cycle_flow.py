@@ -139,9 +139,9 @@ def create_grid():
     
 def plot_predictions(clean_data_df, grid, lr):
     trace1 = go.Scatter3d(
-        x = cleaner_data['total_rainfall_mm'],
-        y = cleaner_data['avg_temp_c'],
-        z = cleaner_data['cycle_counts'],
+        x = clean_data_df['total_rainfall_mm'],
+        y = clean_data_df['avg_temp_c'],
+        z = clean_data_df['cycle_counts'],
         mode = 'markers',
         marker=dict(
             size=5
