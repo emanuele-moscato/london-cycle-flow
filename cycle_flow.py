@@ -124,3 +124,64 @@ def get_features_targets(clean_data_df):
     Y = Y.reshape((len(Y),1))
     
     return X, Y
+    
+    
+def create_grid():
+    xc = np.linspace(0, 120, 100)
+    yc = np.linspace(0, 20, 100)
+    
+    xgrid, ygrid = np.meshgrid(xc, yc)
+    
+    grid = np.vstack((xgrid.flatten(),ygrid.flatten())).T
+    
+    return grid
+    
+    
+def plot_predictions(clean_data_df, grid, lr):
+    trace1 = go.Scatter3d(
+        x = clean_data_df['total_rainfall_mm'],
+        y = clean_data_df['avg_temp_c'],
+        z = clean_data_df['cycle_counts'],
+        mode = 'markers',
+        marker=dict(
+            size=5
+        ),
+        name = 'data'
+    )
+
+    trace2 = go.Scatter3d(
+        x = grid[:,0],
+        y = grid[:,1],
+        z = lr.predict(grid).flatten(),
+        mode = 'markers',
+        marker=dict(
+            size=1,
+            color='rgb(255,255,102)',
+            opacity=0.6
+        ),
+        name = 'prediction'
+    )
+
+    data = [trace1, trace2]
+
+    layout = go.Layout(
+        margin = dict(
+            t = 50,
+            b = 50
+        ),
+        scene = dict(
+            xaxis = dict(
+                title = 'total rainfall (mm)'
+            ),
+            yaxis = dict(
+                title = 'average temperature (C)'
+            ),
+            zaxis = dict(
+                title = 'cycle counts'
+            )
+        )
+    )
+
+    fig = go.Figure(data=data, layout=layout)
+
+    iplot(fig)
