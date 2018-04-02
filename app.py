@@ -73,9 +73,24 @@ app.title = 'Cycle count dashboard'
 )
 def write_params(n_clicks, rainfall, temperature):
     if n_clicks and n_clicks>0:
-        new_div = html.Div(
-            html.P('Parameters: {}, {}'.format(rainfall, temperature))
-        )
+        try:
+            float(rainfall)
+            float(temperature)
+            
+            new_div = html.Div(
+                html.P('Parameters: {}, {}'.format(rainfall, temperature))
+            )
+            
+        except:
+            new_div = html.Div(children=[
+                html.P('Parameters: {}, {}'.format(rainfall, temperature)),
+                html.P(
+                    'One or more non-numerical parameters: can\'t make prediction!',
+                    style={'color': 'red'}
+                )
+            ]
+            )
+            
         
         return new_div
     
