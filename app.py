@@ -35,14 +35,14 @@ app.layout = html.Div(children=[
     ),
     
     dcc.Input(
-        placeholder='Total rainfall (mm)...',
+        placeholder='Total rainfall (mm)',
         id='rainfall-input',
         type='text',
         value=''
     ),
     
     dcc.Input(
-        placeholder='Average temparature (C)...',
+        placeholder='Average temparature (C)',
         id='temperature-input',
         type='text',
         value=''
@@ -73,9 +73,24 @@ app.title = 'Cycle count dashboard'
 )
 def write_params(n_clicks, rainfall, temperature):
     if n_clicks and n_clicks>0:
-        new_div = html.Div(
-            html.P('Parameters: {}, {}'.format(rainfall, temperature))
-        )
+        try:
+            float(rainfall)
+            float(temperature)
+            
+            new_div = html.Div(
+                html.P('Parameters: {}, {}'.format(rainfall, temperature))
+            )
+            
+        except:
+            new_div = html.Div(children=[
+                html.P('Parameters: {}, {}'.format(rainfall, temperature)),
+                html.P(
+                    'One or more non-numerical parameters: can\'t make prediction!',
+                    style={'color': 'red'}
+                )
+            ]
+            )
+            
         
         return new_div
     
