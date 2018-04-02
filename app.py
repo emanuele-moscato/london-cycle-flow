@@ -3,7 +3,7 @@ from flask import Flask
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
-from dash.dependencies import Input, Output
+from dash.dependencies import Input, Output, State
 import datetime
 import plotly.graph_objs as go
 import pandas as pd
@@ -43,23 +43,39 @@ app.layout = html.Div(children=[
     
     html.Button('Predict', id='predict-button'),
     
+    html.Div(id='params'),
+    
     html.Div(id='plot', children=[
         dcc.Graph(id='counts-graph')
     ])
 ])
 
 
+@app.callback(
+    Output(component_id='params', component_property='children'),
+    [Input('predict-button', 'n_clicks')],
+    [
+        State('rainfall-input', 'value'),
+        State('temperature-input', 'value')]
+)
+def write_params(n_clicks, rainfall, temperature):
+    if n_clicks and n_clicks>0:
+        new_div = html.Div(
+            html.P('Parameters: {}, {}'.format(rainfall, temperature))
+        )
+        
+        return new_div
+    
 
 
 @app.callback(
     Output(component_id='counts-graph', component_property='figure'),
+    [Input('predict-button', 'n_clicks')],
     [
-        Input('rainfall-input', 'value'),
-        Input('temperature-input', 'value'),
-        Input('predict-button', 'n_clicks')
-    ]
+        State('rainfall-input', 'value'),
+        State('temperature-input', 'value')]
 )
-def plot_prediction(rainfall, temperature, n_clicks=0):
+def plot_prediction(n_clicks, rainfall, temperature):
     if not n_clicks:
         n_clicks = 0
     
@@ -89,23 +105,27 @@ def plot_prediction(rainfall, temperature, n_clicks=0):
 
     data = [trace1, trace2]
     
-    if rainfall and temperature:
-        rainfall = float(rainfall)
-        temperature = float(temperature)
-        
-        trace3 = go.Scatter3d(
-            x = rainfall,
-            y = temperature,
-            z = lr.predict(np.array([rainfall, temperature]).reshape((1,2))),
-            mode = 'markers',
-            marker=dict(
-                size=5,
-                color='red'
-            ),
-            name = 'new prediction'
-        )
-        
-        data.append(trace3)
+    if n_clicks > 0:
+        try:
+            rainfall = np.array([float(rainfall)])
+            temperature = np.array([float(temperature)])
+            
+            trace3 = go.Scatter3d(
+                x = rainfall,
+                y = temperature,
+                z = lr.predict(np.vstack((rainfall, temperature)).T).flatten(),
+                mode = 'markers',
+                marker=dict(
+                    size=5,
+                    color='red'
+                ),
+                name = 'new prediction'
+            )
+            
+            data.append(trace3)
+            
+        except:
+            pass
 
     layout = go.Layout(
         margin = dict(
