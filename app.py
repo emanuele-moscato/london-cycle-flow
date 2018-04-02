@@ -35,14 +35,14 @@ app.layout = html.Div(children=[
     ),
     
     dcc.Input(
-        placeholder='Total rainfall (mm)...',
+        placeholder='Total rainfall (mm)',
         id='rainfall-input',
         type='text',
         value=''
     ),
     
     dcc.Input(
-        placeholder='Average temparature (C)...',
+        placeholder='Average temparature (C)',
         id='temperature-input',
         type='text',
         value=''
