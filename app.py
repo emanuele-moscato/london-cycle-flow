@@ -12,8 +12,15 @@ from sklearn.externals import joblib
 from cycle_flow import *
 
 
-server = Flask('cycle count')
+server = Flask('cycle count', static_url_path='')
 app = dash.Dash('Cycle count dashboard', server=server, url_base_pathname='/', csrf_protect=False)
+
+
+# Hack to allow serving custom CSS. Taken from this:
+# https://community.plot.ly/t/how-do-i-use-dash-to-add-local-css/4914/4
+@server.route('/static/style.css')
+def serve_stylesheet():
+    return server.send_static_file('style.css')
 
 
 
@@ -49,6 +56,12 @@ app.layout = html.Div(children=[
         dcc.Graph(id='counts-graph')
     ])
 ])
+
+
+app.css.append_css({
+    'external_url': '/static/style.css'
+})
+app.title = 'Cycle count dashboard'
 
 
 @app.callback(
