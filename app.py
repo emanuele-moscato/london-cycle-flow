@@ -160,6 +160,8 @@ def plot_prediction(n_clicks, rainfall, temperature):
             t = 50,
             b = 50
         ),
+        width=800,
+        height=600,
         scene = dict(
             xaxis = dict(
                 title = 'total rainfall (mm)'
