@@ -31,7 +31,7 @@ lr = joblib.load('/project/london_cycle_flow/london-cycle-flow/model.pkl')
 
 app.layout = html.Div(children=[
     html.Div(
-        html.H1(children='Cycle counts')
+        html.H1(children='Predicting the number of cycles in London')
     ),
     
     dcc.Input(
