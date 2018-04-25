@@ -24,10 +24,10 @@ def serve_stylesheet():
 
 
 
-data_df = pd.read_excel('/project/london_cycle_flow/tfl-cycle-flows-tlrn.xlsx', sheet_name=1)
+data_df = pd.read_excel('/project/apps/london-cycle-flow/data/tfl-cycle-flows-tlrn.xlsx', sheet_name=1)
 clean_data_df = clean_data(data_df)
 grid = create_grid()
-lr = joblib.load('/project/london_cycle_flow/london-cycle-flow/model.pkl')
+lr = joblib.load('/project/apps/london-cycle-flow/model.pkl')
 
 app.layout = html.Div(children=[
     html.Div(
